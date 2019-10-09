@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>选项卡</title>
+    <link rel="stylesheet" href="./t.css" type="text/css" />
+</head>
+
+<body>
+    <section id="wrap">
+        <div id="left">
+            <div id="select" class="active">1</div>
+            <div>2</div>
+            <div>3</div>
+            <p class="active" id = 'one1'>
+                <span class="active">1-1</span>
+                <span>1-2</span>
+                <span>1-3</span>
+                <em class="active">1-1</em>
+                <em>1-2</em>
+                <em>1-3</em>
+            </p>
+            <p id = 'one2'>
+                <span class="active">2-1</span>
+                <span>2-2</span>
+                <span>2-3</span>
+                <em class="active">2-1</em>
+                <em>2-2</em>
+                <em>2-3</em>
+            </p>
+            <p id = 'one3'>
+                <span class="active">3-1</span>
+                <span>3-2</span>
+                <span>3-3</span>
+                <em class="active">3-1</em>
+                <em>3-2</em>
+                <em>3-3</em>
+            </p>
+        </div>
+    </section>
+</body>
+<script>
+    window.onload = function () {
+        function Tab(id,select,selected){   //参数1： 最外层的块级元素id 参数二 选项标签类型 参数三 被选框标签类型
+                                            //布局时：一个父元素 ，选择标签和被选标签都属于父元素的子标签
+                                            //嵌套选项卡时，子选项卡的标签不能与父选项卡的父元素的子元素用相同标签
+            this.parent =  document.getElementById(id)
+            this.aDivSelect =this.parent.getElementsByTagName(select);
+            this.aPSelected = this.parent.getElementsByTagName(selected);
+            [...this.aDivSelect].forEach((item,j)=>{
+                item.addEventListener('click',()=>{
+                    [...this.aDivSelect].forEach((item1,i)=>{
+                        item1.classList.remove(this.className);
+                        this.aPSelected[i].classList.remove(this.className);
+                    })
+                    item.classList.add(this.className);
+                    this.aPSelected[j].classList.add(this.className);
+                })
+            })
+        }
+        Tab.prototype.className = 'active'; // 公有属性 ，添加或删除的类名
+        new Tab('left','div','p');
+        new Tab('one1','span','em');
+        new Tab('one2','span','em');
+        new Tab('one3','span','em');
+    }
+</script>
+
+</html> 
