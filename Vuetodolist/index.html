@@ -93,6 +93,9 @@
         #ed li span{
             background:#aaa;
         }
+        [v-cloak]{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -107,7 +110,7 @@
             >
         </div>
         <div id="ing">
-            <p>正在进行<span>{{inglist.length}}</span></p>
+            <p>正在进行<span v-cloak>{{inglist.length}}</span></p>
             <ul>
                 <li 
                     is="l-listone" 
@@ -119,7 +122,7 @@
             </ul>
         </div>
         <div id="ed">
-            <p>已经完成<span>{{edlist.length}}</span></p>
+            <p>已经完成<span v-cloak>{{edlist.length}}</span></p>
             <ul>
                 <li 
                 is="l-listone" 
