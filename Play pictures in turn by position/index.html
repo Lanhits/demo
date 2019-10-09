@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>选项卡</title>
+    <link rel="stylesheet" href="./t.css" type="text/css" />
+</head>
+    <section id="wrap">
+        <ul id="photo">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <ol id="drop">
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ol>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </section>
+<body>
+   
+</body>
+<script>
+    window.onload = function () {
+        class Thumbnail{
+        //缩略图类 
+        //布局 父元素 + ol(做选择远点) + 缩略图元素（缩略图） //一般配合轮播图使用  + ul (放图片)
+        //参数：1、父元素id  // 都为字符串
+        //      3、ol id
+        //      4、缩略图标签类型
+            constructor(panrenId,dropPId,thumbnailEle){
+                this.parent = document.getElementById(panrenId);
+                this.selectParent = document.getElementById(dropPId);
+                this.targets = this.parent.getElementsByTagName(thumbnailEle);
+                this.selects = this.selectParent.getElementsByTagName('li');
+                this.left = [];
+                this.top = this.selectParent.offsetTop - this.targets[0].offsetHeight -10;
+                [...this.selects].forEach( (item,i) => {
+                    this.left.push(item.offsetLeft + this.selectParent.offsetLeft + item.offsetWidth/2 - this.targets[0].offsetWidth/2);
+
+                    item.onmouseover = ()=>{
+                        this.targets[i].style.left = this.left[i] + 'px';
+                        this.targets[i].style.top =  this.top +'px';
+                    }
+                    item.onmouseleave = ()=>{
+                        this.targets[i].style.left = '';
+                        this.targets[i].style.top =  '';
+                    }
+                })
+                
+            }
+        }
+        class Carousel{
+            //布局： //布局 父元素 + ol(做选择远点) +   + ul //如需要缩略图 + 缩略图元素（缩略图） 
+            //参数： 1、父元素id
+            //       2、drop ol id
+            //       3、photo ul id
+            constructor(panrenId,dropPId,photoPId){
+                this.parent = document.getElementById(panrenId);
+                this.selectParent = document.getElementById(dropPId);
+                this.photoParent = document.getElementById(photoPId);
+                this.selects = this.selectParent.getElementsByTagName('li');
+                this.photos = this.photoParent.getElementsByTagName('li');
+                this.timer = null;
+                this.timer2 = null;
+                this.now = 5;
+                this.nextOne = 0;
+                this.flag = true;
+                this.isClick = false;
+                this.autoPlay();
+                this.parent.onmouseover = ()=>{clearInterval(this.timer2);}
+                this.parent.onmouseleave = ()=>{this.autoPlay();}
+                [...this.selects].forEach((item,i)=>{
+                    item.addEventListener('click',()=>{
+                        if(this.isClick){
+                            return;
+                        }
+                        if(this.nextOne == i){
+                            return;
+                        }
+                        clearInterval(this.timer);
+                        clearInterval(this.timer2);
+                        this.now = this.nextOne;
+                        this.nextOne = i;
+                        this.flag = false;
+                        this.move(this.nextOne,this.now,this.flag);
+                    }) 
+                })
+
+
+                this.w = window;
+                this.w.onblur = function(){
+                    clearInterval(this.timer);
+                    clearInterval(this.timer2);
+                }
+                this.w.onfocus = function(){
+                    autoPlay();
+                }
+                
+            }
+            //图片移动函数
+            //参数：1、移入元素
+            //      2、移出元素
+            //      3、单向移动(true) - 双向移动(false)
+            move(come,out,flag,isClick){ 
+                if(flag){
+                    this.photos[come].style.left = '800px';
+                    this.photos[out].style.left = '0';
+                    this.selects[come].classList.add(this.className);
+                    this.selects[out].classList.remove(this.className);
+                    this.timer =  setInterval(()=>{
+                            this.photos[come].style.left = this.photos[come].offsetLeft - this.speek + 'px';
+                            this.photos[out].style.left = this.photos[out].offsetLeft - this.speek + 'px';
+                            if(this.photos[come].offsetLeft <= 0){
+                                this.photos[come].style.left = '0px';
+                                clearInterval(this.timer);
+                            }
+                    },1000/60)
+                }else{
+                    this.isClick = true; //点击成功在运行点击的功能的时候让他点成true
+                    [...this.photos].forEach((item)=>{
+                            item.style.left = '800px';
+                    })
+
+                    this.selects[come].classList.add(this.className);
+                    this.selects[out].classList.remove(this.className);
+                    if(come>out){
+                        this.photos[come].style.left = '800px';
+                        this.photos[out].style.left = '0';
+                        
+                    }else{
+                        this.photos[come].style.left = '-800px';
+                        this.photos[out].style.left = '0';
+                    }
+                    this.timer =  setInterval(()=>{
+                        if(come>out){
+                            this.photos[come].style.left = this.photos[come].offsetLeft - this.speek + 'px';
+                            this.photos[out].style.left = this.photos[out].offsetLeft - this.speek + 'px';
+                            if(this.photos[come].offsetLeft <= 0){
+                                this.photos[come].style.left = '0px';
+                                this.isClick = false;//点击功能结束后让它回到原样
+                                clearInterval(this.timer);
+                            }
+                        }else{
+                            this.photos[come].style.left = this.photos[come].offsetLeft + this.speek + 'px';
+                            this.photos[out].style.left = this.photos[out].offsetLeft + this.speek + 'px';
+                            if(this.photos[come].offsetLeft >= 0){
+                                this.isClick = false;
+                                this.photos[come].style.left = '0px';
+                                clearInterval(this.timer); //点击功能结束后让它回到原样
+                            }
+                        }  
+                    },1000/60)
+                }
+            }
+            //自动播放函数，每3秒移动一次
+            autoPlay(){
+                this.timer2 = setInterval(()=>{
+                    this.flag = true;
+                    this.now = this.nextOne;
+                    this.nextOne = this.nextOne + 1;
+                    console.log(this.now);
+                    if(this.nextOne == this.photos.length){
+                        this.nextOne = 0;
+                    }
+                    this.move(this.nextOne,this.now,this.flag);
+                },3000)
+            }
+
+        }
+        Carousel.prototype.className = 'active'; //drop 需要改的类名classname
+        Carousel.prototype.speek = 40;      //每帧移动的像素
+        new Thumbnail('wrap','drop','div');
+        new Carousel('wrap','drop','photo');
+    }
+</script>
+
+</html>  

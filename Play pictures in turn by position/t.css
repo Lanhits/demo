@@ -1,0 +1,79 @@
+
+#wrap{
+    position: relative;
+    width: 800px;
+    height: 500px;
+    margin:  20px auto;
+    background: #777;
+    overflow: hidden;
+}
+ul li ,ol li{
+    list-style: none;
+}
+ul, ol {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+ul li{
+    position: absolute;
+    top: 0;left: 800px;
+    width: 800px;
+    height: 449px;
+    background: pink;
+}
+ul li:nth-of-type(1){
+    left: 0;
+    background: url('./img/1.jpg') no-repeat;
+    background-size: cover;
+}
+ul li:nth-of-type(2){
+    background: url('./img/2.jpg') no-repeat;
+    background-size: cover;
+}
+ul li:nth-of-type(3){
+    background: url('./img/20341260_1367121265368.jpg') no-repeat;
+    background-size: cover;
+}
+ul li:nth-of-type(4){
+    background: url('./img/5417cc08690f0.jpg') no-repeat;
+    background-size: cover;
+}
+ul li:nth-of-type(5){
+    background: url('./img/海贼女帝.jpg') no-repeat;
+    background-size: cover;
+}
+ol{
+    position: relative;
+    top: 465px;
+    margin: 0 auto;
+    width: 150px;
+}
+ol li{
+    float: left;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 5px;
+    background: #fff;
+}
+ol li.active{
+    background: orange;
+}
+ol li:hover{
+    background: orange;
+}
+div{
+    position: absolute;
+    left: -200px;
+    z-index: 10;
+    width: 150px;
+    height: 84px;
+    border: solid 2px #abf;
+    border-radius: 5px;
+}
+div:nth-of-type(1){ background: url('./img/1.jpg') repeat;background-size: cover;}
+div:nth-of-type(2){ background: url('./img/2.jpg') repeat;background-size: cover;}
+div:nth-of-type(3){ background: url('./img/20341260_1367121265368.jpg') repeat;background-size: cover;}
+div:nth-of-type(4){ background: url('./img/5417cc08690f0.jpg') repeat;background-size: cover;}
+div:nth-of-type(5){ background: url('./img/海贼女帝.jpg') repeat;background-size: cover;}
