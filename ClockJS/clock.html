@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #wrap{
+            width: 100px;
+            height: 100px;
+            background: #ccc;
+            position: relative;
+            margin: 100px auto;
+            border-radius: 50%;
+            text-align: center;
+        }
+        ul{
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+        ul li{
+            position: absolute;
+            left: 49.5px;
+            top: 0px;
+            list-style: none;
+            width: 1px;
+            height: 5px;
+            background: #000;
+            transform-origin: 0 50px;
+        }
+        ul li:nth-of-type(5n+1){
+            left: 49.5px;
+            width: 2px;
+            height: 8px;
+        }
+        span:nth-of-type(1){
+            position: absolute;
+            left: 47px;
+            top: 47px;
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #000;
+        }
+        span:nth-of-type(2){
+            position: absolute;
+            left: 49.5px;
+            top: 15px;
+            display: block;
+            width: 1px;
+            height: 35px;
+            background: #000;
+            transform-origin: 0.5px 35px;
+
+        }
+        span:nth-of-type(3){
+            position: absolute;
+            left: 49px;
+            top: 25px;
+            display: block;
+            width: 2px;
+            height: 25px;
+            background: #000;
+            transform-origin: 1px 25px;
+        }
+        span:nth-of-type(4){
+            position: absolute;
+            left: 48.5px;
+            top: 30px;
+            display: block;
+            width: 3px;
+            height: 20px;
+            background: #000;
+            transform-origin: 1.5px 20px;
+        }
+        em{
+            position: absolute;
+            display: block;
+            width: 20px;
+            left: 40px;
+            top:6px;
+            font-size: 10px;
+            font-style: normal;
+            transform-origin: 10px 44px;
+        }
+        em:nth-of-type(5){
+            top:80px;
+            transform-origin:10px -30px;
+        }
+        em:nth-of-type(6){
+            top:80px;
+            transform-origin:10px -30px;
+        }
+        em:nth-of-type(7){
+            top:80px;
+            transform-origin:10px -30px;
+        }
+        em:nth-of-type(8){
+            top:80px;
+            transform-origin:10px -30px;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div id="wrap">
+        <ul id="mackParent">
+            <!-- <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li> -->
+        </ul>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <!-- <em>1</em>
+        <em>2</em>
+        <em>3</em> -->
+    </div>
+</body>
+    <script>
+        window.onload = function (){
+            class Clock{
+                constructor(wrapId,mackParentId){
+                    this.parent = document.querySelector('#mackParent');
+                    this.wrap = document.querySelector('#wrap');
+                    this.aHand = document.querySelectorAll('span');
+                    this.data = new Date;
+                    this.s = this.data.getSeconds();
+                    this.f = this.data.getMinutes();
+                    this.h = this.data.getHours();
+                    this.mark();
+                    this.markhours();
+                    this.trans();
+                    this.timer = setInterval(()=>{
+                        this.s ++;
+                        if(this.s==60){
+                            this.f++;
+                            this.s = 0;
+                        }
+                        if(this.f == 60){
+                            this.h++;
+                            this.f = 0;
+                        }
+                        if(this.h>12){
+                            this.h = this.h - 12;
+                        }
+                        this.trans();
+                    },1000);
+                }
+                mark(){
+                    for(let i = 0; i <60; i++){
+                        var oli = document.createElement('li');
+                        oli.style.transform = `rotate(${i*6}deg)`;
+                        this.parent.appendChild(oli);
+                    }
+                }
+                markhours(){
+                    for(let i = 0; i <12; i++){
+                        var oEm = document.createElement('em');
+                        if(i>3 && i < 8){
+                            oEm.style.transform = `rotate(${(i-6)*30}deg)`;
+                        }else if(i == 3){
+                            oEm.style.left = '78px';
+                            oEm.style.top = '45px';
+                        }else if(i == 9){
+                            oEm.style.left = '2px';
+                            oEm.style.top = '43px';
+                        }else{
+                            oEm.style.transform = `rotate(${i*30}deg)`;
+                        }
+                        
+                        if(i){
+                            oEm.innerHTML = i;
+                        }else{
+                            oEm.innerHTML = 12;
+                        }
+                        this.wrap.appendChild(oEm);
+                    }
+                }
+                trans(){
+                    this.aHand[1].style.transform = `rotate(${this.s*6}deg)`;
+                    this.aHand[2].style.transform = `rotate(${(this.f + this.s/60)*6}deg)`;
+                    this.aHand[3].style.transform = `rotate(${(this.h + this.f/60)*30}deg)`;
+                }
+            }
+            new Clock();
+        }
+    </script>
+</html>
