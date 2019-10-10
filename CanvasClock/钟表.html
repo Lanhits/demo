@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            background: #000;
+        }
+        canvas{
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+</body>
+<script>
+    var oC = document.querySelector('canvas'); //获取canvas标签
+    var ctx = oC.getContext('2d');    // 
+    oC.width = 600;
+    oC.height = 400;
+
+    var d = new Date();
+    var h = d.getHours();
+    var f = d.getMinutes();
+    var s = d.getSeconds();
+
+    ctx.translate(200,200)
+        
+    clock(h,f,s);
+    setInterval(()=>{
+        s++;
+        if(s == 60){
+            s=0;
+            f++;
+        }
+        if(f == 60 ){
+            f = 0;
+            h++;
+        }
+        if(h>=12){
+            h=h-12;
+        }
+        ctx.clearRect(-110,-110,600,400);//全部清除
+        clock(h,f,s);
+    },1000);
+    
+
+
+    function clock(h,f,s){
+        ctx.beginPath(); //画外圆
+        ctx.arc(0,0,100,0,2* Math.PI);
+        ctx.closePath();
+        ctx.stroke();
+
+        for(let i = 0; i< 60; i++){//画小刻度
+            ctx.beginPath();
+            ctx.rotate(6*Math.PI/180);
+            ctx.strokeStyle = '#abf';
+            ctx.save();
+            ctx.moveTo(0,90);
+            ctx.lineTo(0,100);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
+        }  
+        for(let i = 0; i< 12; i++){//画时刻度
+            ctx.rotate(30*Math.PI/180);
+            ctx.save();
+            ctx.beginPath();
+            ctx.strokeStyle = '#00f';
+            ctx.lineWidth = 4;
+            ctx.moveTo(0,85);
+            ctx.lineTo(0,100);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
+        }
+        ctx.beginPath();//画内圆心
+        ctx.arc(0,0,5,0,2*Math.PI);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.beginPath();//画秒针
+        ctx.save();
+        ctx.rotate((s+30)*6*Math.PI/180);
+        ctx.moveTo(0,0);
+        ctx.lineTo(0,80);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.beginPath();//画分针
+        ctx.save();
+        ctx.rotate((f+30+s/60)*6*Math.PI/180);  
+        ctx.strokeStyle = '#0f0';
+        ctx.moveTo(0,0);
+        ctx.lineTo(0,65);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.beginPath();//画时针
+        ctx.save();
+        ctx.rotate((h+6+f/60)*30*Math.PI/180);
+        ctx.strokeStyle = '#f00';
+        ctx.moveTo(0,0);
+        ctx.lineTo(0,40);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+    }
+    
+</script>
+</html>
