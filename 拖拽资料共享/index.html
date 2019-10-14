@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        ul{
+            padding: 0;
+            margin: 0;
+        }
+        ul li{
+            list-style: none;
+        }
+        div{
+            display: inline-block;
+        }
+        img{
+            width: 200px;
+            height: 280px;
+        }
+        section{
+            position: relative;
+            border: 1px solid #000;
+            width: 600px;
+            height: 300px;
+        }
+        section ul li {
+            float: left;
+            width: 33%;
+            height: 20px;
+            background: pink;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="B001" draggable="true">
+        <ul>
+            <li><img  src="./img/img1.jpg" ></li>
+            <li>32￥</li>
+            <li>JavaScript语言精粹</li>
+        </ul>
+    </div>
+    <div id="B002" draggable="true">
+        <ul>
+            <li><img src="./img/img2.jpg" ></li>
+            <li>112￥</li>
+            <li>JavaScript权威指南</li>
+        </ul>
+    </div>
+    <div id="B003" draggable="true">
+        <ul>
+            <li><img src="./img/img3.jpg" ></li>
+            <li>67￥</li>
+            <li>精通JavaScript</li>
+        </ul>
+    </div>
+    <div id="B004" draggable="true">
+        <ul>
+            <li><img src="./img/img4.jpg" ></li>
+            <li>88￥</li>
+            <li>JavaScript编程艺术</li>
+        </ul>
+    </div>
+
+    <section>
+        <ul><li>数量</li><li>书名</li><li>单价</li></ul>
+        <ul id='sum'><li></li><li>共计：</li><li>0￥</li></ul>
+    </section>
+</body>
+<script>    
+    window.onload = function(){
+        var aDiv = document.querySelectorAll('div');
+        var aImg = document.querySelectorAll('img');
+        var oSection = document.querySelector('section');
+        var oUlSum = document.querySelector('#sum');
+        var oLiSum = oUlSum.querySelectorAll('li')[2];
+        var aUlS = oSection.getElementsByTagName('ul');
+        var sum = 0 ;
+        aDiv.forEach((item)=>{
+            item.addEventListener('dragstart',function(ev){
+                var ev = ev || window.event;
+                var ali = item.querySelectorAll('li');
+                var name = ali[2].innerHTML;
+                var money = ali[1].innerHTML;
+                var Id = item.id;
+                ev.dataTransfer.setData('name',name);
+                ev.dataTransfer.setData('money',money);
+                ev.dataTransfer.setData('Id',Id);
+                ev.dataTransfer.setDragImage(this,0,0);
+            });
+        });
+        oSection.addEventListener('dragover',(ev)=>{
+            var ev = ev || window.event;
+            ev.preventDefault();
+        });
+        oSection.addEventListener('drop',(ev)=>{
+            var ev = ev || window.event;
+            var flag = true;
+            var oNow = null;
+            [...aUlS].forEach((item)=>{
+                if(ev.dataTransfer.getData('Id') == item.className ){
+                    flag = false;
+                    oNow = item;
+                }
+            });
+            if(flag){
+                var oUl = document.createElement('ul');
+                var oLi1 = document.createElement('li');
+                var oLi2 = document.createElement('li');
+                var oLi3 = document.createElement('li');
+                oUl.className = ev.dataTransfer.getData('Id');
+                oLi1.innerHTML = '1';
+                oLi2.innerHTML = ev.dataTransfer.getData('name');
+                oLi3.innerHTML = ev.dataTransfer.getData('money');
+                oUl.appendChild(oLi1);
+                oUl.appendChild(oLi2);
+                oUl.appendChild(oLi3);
+                oSection.insertBefore(oUl,oUlSum);
+                sum += parseInt(oLi3.innerHTML);
+            }else{
+                var oLi = oNow.querySelector('li');
+                oLi.innerHTML =  oLi.innerHTML*1 + 1; 
+                sum += parseInt(ev.dataTransfer.getData('money'));
+            }
+            oLiSum.innerHTML = sum + '￥';
+        });
+
+    }
+</script>
+</html>
