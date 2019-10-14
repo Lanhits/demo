@@ -3,3 +3,4 @@
 + [点击体验轮播图效果](https://lanhits.github.io/demo/PlayPicturesInTturnByPosition)
 + [点击体验ToDoList效果](https://lanhits.github.io/demo/Vuetodolist)
 + [点击体验挂钟效果](https://lanhits.github.io/demo/ClockJS)
++ [点击体验canvas挂钟效果](https://lanhits.github.io/demo/CanvasClock)
